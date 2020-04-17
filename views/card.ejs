@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OSU STATUS</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="wrap card_wrap">
+        <section class="form_section">
+            <article>
+                <form for="user" method="post" class="userForm" id="userForm">
+                    <input type="hidden" name="mode" id="modes">
+                    <input type="text" name="user" id="user" placeholder="User Nickname" autocomplete="off">
+                    <button type="submit">Search</button>
+                </form>
+            </article>
+        </section>
+        <% if(typeof userList != 'undefined') { %>
+
+        <main>
+            <form>
+                <input type="hidden" value="<%= userList[13] %>" id="modeCode">
+            </form>
+
+            <div class="user_info">
+                <div class="rank_wrap">
+                    <div>
+                        <img src="https://a.ppy.sh/<%= userList[11] %>" alt="<%= userList[0] %>'s Avatar" width="200"
+                            height="200">
+                    </div>
+
+                    <div>
+                        <span><strong style="color:#ffd900">SS</strong> : <%= userList[6] %></span>
+                        <span><strong style="color:#999999">SS</strong> : <%= userList[7] %></span>
+                    </div>
+                    <div>
+                        <span><strong style="color:#ffd900">S</strong> : <%= userList[8] %></span>
+                        <span><strong style="color:#999999">S</strong> : <%= userList[9] %></span>
+                    </div>
+                    <div>
+                        <span><strong style="color:#048500">A</strong> : <%= userList[10] %></span>
+                        <span><strong style="color:#fff;">total</strong> :
+                            <%= userList[6] + userList[7] + userList[8] + userList[9] + userList[10] %></span>
+                    </div>
+                </div>
+
+                <div class="info_wrap">
+                    <span id="nickname"><%= userList[0] %></span>
+                    <span id="playcount">Play Count : <%= userList[2] %></span>
+                    <span id="pp">Performance Point : <%= userList[5] %>pp</span>
+                    <span id="playmode">Play Mode : <%= userList[12] %></span>
+
+                    <div class="rank_info">
+                        <span class="player_rank"><%= userList[1] %> #<%= userList[3] %>
+                            <small>(#<%= userList[4] %>)</small></span>
+                    </div>
+                </div>
+
+                <%if(typeof best_beatmap != "undefined"){ %>
+                <div class="other_wrap">
+                    <% let result = 0; let sum = 0;%>
+                    <% for(let i = 0; i < best_beatmap.length; i++){
+                        sum = sum + best_beatmap[i][1];
+                    } %>
+                    <div class="other_pp">
+                        <span class="avr"> Average PP : <span class="pp"><%= Math.round(sum / 20) * 1 %>
+                                PP</span></span>
+                        <span class="hig"> Highest PP : <span class="pp"><%= best_beatmap[0][1] * 1 %> PP<span></span>
+                    </div>
+                    <div>
+                        <% let topof = userList[3] / 15210892 * 100; %>
+                        <% if(topof <= 100 && topof > 1) { %>
+                        <span><%= topof.toFixed(3) %> % of top</span>
+                        <% } else if(topof <= 1 && topof > 0.0001) { %>
+                        <span><%= topof.toFixed(4) %> % of top</span>
+                        <% } else if(topof <= 0.0001 && topof > 0.00001) { %>
+                        <span><%= topof.toFixed(5) %> % of top</span>
+                        <% } else if(topof <= 0.00001 && topof > 0.000001) { %>
+                        <span><%= topof.toFixed(6) %> % of top</span>
+                        <% } else { %>
+                        ?
+                        <% } %>
+                    </div>
+                    <% } else { %>
+                    <span style="font-size:24px; color:#fff; font-weight: bold;">정보가 없습니다.</span>
+                    <% } %>
+                </div>
+            </div>
+            <div class="modeBox">
+                <span onclick="changeMode('mstd');" id="mstd" class="modeSelect">Standard</span>
+                <span onclick="changeMode('mtai');" id="mtai" class="modeSelect">Taiko</span>
+                <span onclick="changeMode('mcat');" id="mcat" class="modeSelect">Catch</span>
+                <span onclick="changeMode('mman');" id="mman" class="modeSelect">Mania</span>
+            </div>
+            <% if(typeof best_beatmap != 'undefined'){ %>
+            <div class="state">
+                <% for(let i = 0; i < best_beatmap.length; i++){ %>
+                <div class="song_info" id="song_info<%= i %>" onclick="popup('<%= i %>');"
+                    style="background:url('https://assets.ppy.sh/beatmaps/<%= best_beatmap[i][13][2] %>/covers/cover.jpg') no-repeat center center; background-size: cover; cursor: pointer;">
+                    <div class="overlay"></div>
+                    <div class="song_wrap">
+                        <div class="rank">
+                            <% switch(best_beatmap[i][2]){
+                            case 'XH': %>
+                            <span style="color:#e2e2e2; -webkit-text-stroke: 2px #fff;"> SS </span>
+                            <% break; 
+                            case 'X': %>
+                            <span style="color:#ffd900; -webkit-text-stroke: 2px #fff;"> SS </span>
+                            <% break; 
+                            case 'SS': %>
+                            <span style="color:#ffd900; -webkit-text-stroke: 1px #fff;"> <%= best_beatmap[i][2] %></span>
+                            <% break; 
+                            case 'SH': %>
+                            <span style="color:#e2e2e2; -webkit-text-stroke: 2px #999999;"> S </span>
+                            <% break; 
+                            case 'S': %>
+                            <span style="color:#ffd900"> <%= best_beatmap[i][2] %></span>
+                            <% break;
+                            case 'A': %>
+                            <span style="color:#048500"> <%= best_beatmap[i][2] %></span>
+                            <% break;
+                            case 'B': %>
+                            <span style="color:#2318bb"> <%= best_beatmap[i][2] %></span>
+                            <% break;
+                            case 'C': %>
+                            <span style="color:#800491"> <%= best_beatmap[i][2] %></span>
+                            <% break;
+                            default:  %>
+                            <span style="color:#666"> <%= best_beatmap[i][2] %></span>
+                            <% break;
+                        }%>
+                        </div>
+
+                        <div class="rank_date">
+                            <div class="song_diff">
+                                <div class="song_diff_box">
+                                    <span class="song_title"
+                                        id="song_title<%= i %>"><%= best_beatmap[i][13][0] %></span><br>
+                                    <span class="diff" id="song_diff<%= i %>">[<%= best_beatmap[i][13][1] %>]</span><br>
+                                    <div style="display:none;">
+                                        <span id="song_rating<%= i %>"><%= best_beatmap[i][13][3] %></span>
+                                        <span id="song_od<%= i %>"> <%= best_beatmap[i][13][4] %></span>
+                                        <span class="mods" id="song_mods<%= i %>"><%= best_beatmap[i][11] %></span>
+                                    </div>
+                                </div>
+                                <div class="date-wrap">
+                                    <span class="date"><%= best_beatmap[i][3] %></span>
+                                </div>
+                            </div>
+
+                            <div class="judge">
+                                <% switch(userList[12]){
+                                    case 'standard': %>
+                                <div><small>300</small><span><%= best_beatmap[i][5] + best_beatmap[i][6] %></span></div>
+                                <div><small>100</small><span><%= best_beatmap[i][7] + best_beatmap[i][8] %></span></div>
+                                <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
+                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <% break; 
+                                    case 'taiko': %>
+                                <div><small>GREAT</small><span><%= best_beatmap[i][6] %></span></div>
+                                <div><small>GOOD</small><span><%= best_beatmap[i][8] %></span></div>
+                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <% break;
+                                    case 'catch': %>
+                                <div><small>FRUITS</small><span><%= best_beatmap[i][6] %></span></div>
+                                <div><small>TICKS</small><span><%= best_beatmap[i][7] %></span></div>
+                                <div><small>DRP MISS</small><span><%= best_beatmap[i][8] %></span></div>
+                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <% break;
+                                    case 'mania': %>
+                                <% 
+                                        <!-- 매니아 정확도 계산 -->
+                                        let miss = best_beatmap[i][10]
+                                        let c50 = best_beatmap[i][9]
+                                        let c100 = best_beatmap[i][8]
+                                        let c200 = best_beatmap[i][7]
+                                        let c300 = best_beatmap[i][5] + best_beatmap[i][6];
+                                        let totalHit = miss + c50 + c100 + c200 + c300;
+
+                                        let abc = ((c50 * 50 + c100 * 100 + c200 * 200 + c300 * 300) / (totalHit * 300)) * 100;
+                                    %>
+                                <div><small>MAX</small><span><%= best_beatmap[i][5] %></span></div>
+                                <div><small>300</small><span><%= best_beatmap[i][6] %></span></div>
+                                <div><small>200</small><span><%= best_beatmap[i][7] %></span></div>
+                                <div><small>100</small><span><%= best_beatmap[i][8] %></span></div>
+                                <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
+                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= abc.toFixed(2) %>%</span>
+                                </div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div style="display:none;"><small>Total</small><span id="total<%= i %>">
+                                        <%= totalHit %></span></div>
+                                <% break;
+                                }%>
+                            </div>
+                            <div class="score_pp">
+
+                                <span class="pp"><%= best_beatmap[i][1] %>pp</span><br>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <% } %>
+
+                <% } else { %>
+                <p style="font-size:34px; color:#fff; font-weight: bold;">정보가 없습니다.</p>
+                <% } %>
+        </main>
+        <% } else if(typeof userList == undefined ){ %>
+        <p style="font-size:34px; color:#fff; font-weight: bold;"><%= userName %>의 <%= msg %></p>
+        <% } %>
+        <span class="footer">made by : <a href="https://osu.ppy.sh/users/10001325" class="link"
+                target="_blank">[HyeN]</a> / twitter : <a href="https://twitter.com/onlysugai" class="link"
+                target="_blank">@onlysugai</a></span>
+
+    </div>
+    <script src="/js/app.js"></script>
+
+    <div class="popup hidden" id="calcPopup">
+        <div class="windowzz">
+            <span id="calc_title"></span>
+            <span id="calc_diff"></span>
+            <span id="calc_mods"></span><br>
+            <span id="calc_ratings"></span>
+            <div onclick="closePopup();" class="closeBtn">X</div>
+            <div class="inputWrap" style="margin-bottom:20px; margin-top:20px;">
+                <form onsubmit="return false;">
+                    <input type="text" name="score" id="inputScore" onkeyup="abc(this.value)" placeholder="점수 입력">
+                </form>
+            </div>
+            <button onclick="calcPP();">계산하기</button>
+            <div>
+                <span id="calculatedPP"></span>
+            </div>
+        </div>
+    </div>
+    <form style="display:none;" onsubmit="return false;">
+        <input type="hidden" id="calc_od">
+        <input type="hidden" id="calc_rating">
+        <input type="hidden" id="calc_mods">
+        <input type="hidden" id="calc_acc">
+        <input type="hidden" id="calc_total">
+    </form>
+</body>
+
+</html>

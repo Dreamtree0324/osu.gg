@@ -1,0 +1,28 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.2.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "node-fetch": "^2.6.0",
+    "requirejs": "^2.3.6"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "browser": {
+    "child_process": false
+  }
+}

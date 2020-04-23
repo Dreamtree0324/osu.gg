@@ -1,5 +1,6 @@
 sessionStorage.setItem("userName", document.getElementById('nickname').innerText);
 
+//해당 모드 셀렉트시 모드명 뒤에 별 붙혀주는 함수
 (function(){
     let modeCode = document.getElementById("modeCode").value;
 
@@ -19,6 +20,7 @@ sessionStorage.setItem("userName", document.getElementById('nickname').innerText
     }
 })();
 
+//pp 계산기 띄워주는 팝업,팝업을 닫았다 새로 열때마다 값이 초기화 된 후 새롭게 정보 다시 받아서 뿌려줌
 function popup(index) {
     document.getElementById('calcPopup').classList.toggle("hidden");
     
@@ -38,11 +40,12 @@ function popup(index) {
     document.getElementById("calculatedPP").innerText = "";
 }
 
+//팝업창 닫기
 function closePopup() {
     document.getElementById('calcPopup').classList.toggle("hidden");
 }
 
-//매니아 PP 계산
+//매니아 PP 계산식
 function calcPP() {
     const c = document.getElementById('calc_rating').getAttribute("value");
     const g = document.getElementById('calc_total').getAttribute("value");
@@ -51,13 +54,11 @@ function calcPP() {
         document.getElementById('inputScore').setAttribute("value", "");
         alert("점수는 0 미만, 1,000,000 초과일 수 없습니다.");
         return;
-    } else if(isNaN(parseInt(scaledScore))){
+    } else if(!Number.isInteger(parseInt(scaledScore))){
         document.getElementById('inputScore').setAttribute("value", "");
         alert("정수형 숫자만 입력하세요 ^^");
-        return
+        return;
     }
-
-    console.log(parseInt(scaledScore));
 
     let strainValue = Math.pow(5 * Math.max(1, c / 0.2) - 4.0, 2.2) / 135.0;
     let accuracyValue;
@@ -88,6 +89,7 @@ function abc(val){
     document.getElementById('inputScore').setAttribute("value", val);
 }
 
+//모드 변경 버튼을 눌렀을 때 해당 모드의 정보를 불러올 수 있게 해주는 함수
 function changeMode(mode){
     let modes = document.getElementById("modes");
     switch(mode){

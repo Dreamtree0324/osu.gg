@@ -11,11 +11,11 @@ router.get('/', function (req, res) {
     res.render("index");
 })
 
-router.get('/card', function (req, res) {
-    res.render('card', {});
+router.get('/userpage', function (req, res) {
+    res.render('userpage', {});
 })
 
-router.post('/card', function (req, res) {
+router.post('/userpage', function (req, res) {
     let user = req.body.user;
     let mode;
 
@@ -41,6 +41,7 @@ router.post('/card', function (req, res) {
     let userCountry;
     let modeName;
 
+    //mode 체크
     switch (mode) {
         case "0":
             modeName = "standard";
@@ -58,6 +59,7 @@ router.post('/card', function (req, res) {
 
     let userList = [];
 
+    //유저 정보 api 호출
     fetch(user_url)
         .then(response => {
             if (response.status === 200 || response.status === 201) {
@@ -100,6 +102,7 @@ router.post('/card', function (req, res) {
                         let mapInfo = [];
                         let bestPP = [];
 
+                        //유저 베퍼포 api 호출
                         let user_best = await fetch(best_url)
                             .then(response => response.json())
                             .then(json => {
@@ -118,6 +121,10 @@ router.post('/card', function (req, res) {
                                     count50 = +element.count50;
                                     countMiss = +element.countmiss;
                                     mods = element.enabled_mods;
+                                    /*mods 관련 코드 - 576 = NC , 1073741888 = DT+MR , 1073742400 = NC+MR
+                                      해당하는 모든 코드를 DT의 코드로 하드코딩
+                                      1073741824 = MR 이므로 논모드로 처리
+                                    */
                                     if(mods == 576 || mods == 1073741888 || mods == 1073742400){
                                         mods = 64;
                                     } else if(mods == 1073741824){
@@ -138,6 +145,7 @@ router.post('/card', function (req, res) {
 
                             for (let i = 0; i < user_best.length; i++) {
                                 let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${user_best[i][4]}&a=1&m=${mode}&k=${key}&limit=20&mods=${user_best[i][11]}`;
+                                //베퍼포별 곡 정보 api 호출
                                 best_beatmap = await fetch(URL)
                                     .then(response => response.json())
                                     .then(json => {
@@ -154,7 +162,7 @@ router.post('/card', function (req, res) {
 
                                     }).catch(err => console.log(err));
                             }
-                            res.render('card', { userList: userList, best_beatmap: best_beatmap });
+                            res.render('userpage', { userList: userList, best_beatmap: best_beatmap });
                         }();
                     }();
                 }).catch(err => { console.log(err) });
@@ -167,6 +175,7 @@ router.get('/error', function (req, res) {
 })
 
 function numberFormat(inputNumber) {
+    //score 표기시 , 를 제거 해주는 정규식, 점수 관련 계산이 필요해 작성함
     return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 

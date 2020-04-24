@@ -296,6 +296,7 @@ form > button:hover{
     flex-direction: column;
     align-items: center;
     margin-left:65px;
+    margin-top:5px;
 }
 
 .rank{

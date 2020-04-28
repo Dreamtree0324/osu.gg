@@ -85,6 +85,11 @@ function calcPP() {
         document.getElementById("calculatedPP").innerText = totalPP.toFixed(2) + "PP";
 }
 
+/*
+    TODO : 매니아 외의 모드 pp 계산기 추가하기
+    STEP1 - 스탠다드 계산기
+*/
+
 function abc(val){
     document.getElementById('inputScore').setAttribute("value", val);
 }

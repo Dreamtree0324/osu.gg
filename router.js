@@ -65,7 +65,7 @@ router.post('/userpage', function (req, res) {
             if (response.status === 200 || response.status === 201) {
                 response.json().then(json => {
                     if(json == ""){
-                        res.render("card", {msg: "정보가 없습니다.", userName: user});
+                        res.render("userpage", {msg: "정보가 없습니다.", userName: user});
                         return;
                     }
                     userID = json[0].user_id;
@@ -170,12 +170,17 @@ router.post('/userpage', function (req, res) {
         })
 });
 
+/*
+    TODO : 비트맵 관련 페이지 제작
+    STEP1 - 비트맵 목록 받아오기
+*/
+
 router.get('/error', function (req, res) {
     res.render('error', { error: "error" });
 })
 
+//score 표기시 , 를 제거 해주는 정규식, 점수 관련 계산이 필요해 작성함
 function numberFormat(inputNumber) {
-    //score 표기시 , 를 제거 해주는 정규식, 점수 관련 계산이 필요해 작성함
     return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 

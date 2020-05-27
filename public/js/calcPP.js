@@ -36,3 +36,7 @@ function maniaCalcPP() {
 
         document.getElementById("calculatedPP").innerText = totalPP.toFixed(2) + "PP";
 }
+
+function standardCalcPP(){
+
+}

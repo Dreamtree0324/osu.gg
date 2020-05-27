@@ -156,36 +156,77 @@
                             <div class="judge">
                                 <% switch(userList[12]){
                                     case 'standard': %>
+                                <%
+                                    let smiss = best_beatmap[i][10]
+                                    let sc50 = best_beatmap[i][9]
+                                    let sc100 = best_beatmap[i][8]
+                                    let sc300 = best_beatmap[i][6];
+
+                                    let stotalHit = smiss + sc50 + sc100 + sc300;
+                                    
+                                    let sAcc = ((sc50 * 50 + sc100 * 100 + sc300 * 300) / (stotalHit * 300)) * 100;
+                                %>    
                                 <div><small>300</small><span><%= best_beatmap[i][5] + best_beatmap[i][6] %></span></div>
                                 <div><small>100</small><span><%= best_beatmap[i][7] + best_beatmap[i][8] %></span></div>
                                 <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= sAcc.toFixed(2) %>%</span></div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div style="display:none;"><small>Total</small><span id="total<%= i %>">
+                                        <%= stotalHit %></span></div>
                                 <% break; 
                                     case 'taiko': %>
+                                <%
+                                    let tmiss = best_beatmap[i][10];
+                                    let tc50 = best_beatmap[i][5]
+                                    let tc100 = best_beatmap[i][8];
+                                    let tc300 = best_beatmap[i][6];
+                                    
+                                    let ttotalHit = tc50 + tc100 + tc300 + tmiss;
+
+                                    let tAcc = ((tc100 * 150 + tc300 * 300) / (ttotalHit * 300)) * 100;
+                                %>
                                 <div><small>GREAT</small><span><%= best_beatmap[i][6] %></span></div>
                                 <div><small>GOOD</small><span><%= best_beatmap[i][8] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= tAcc.toFixed(2) %>%</span></div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div style="display:none;"><small>Total</small><span id="total<%= i %>">
+                                        <%= ttotalHit %></span></div>
                                 <% break;
                                     case 'catch': %>
+                                <%
+                                    let cmiss = best_beatmap[i][10];
+                                    let cc50 = best_beatmap[i][9]
+                                    let cc100 = best_beatmap[i][8];
+                                    let cc300 = best_beatmap[i][6];
+                                    let ckatu = best_beatmap[i][7];
+                                    
+                                    let ctotalHit = cc50 + cc100 + cc300 + ckatu + cmiss;
+                                    let csuccessHit = cc50 + cc100 + cc300;
+
+                                    let cAcc = (csuccessHit / ctotalHit) * 100;
+                                %>
                                 <div><small>FRUITS</small><span><%= best_beatmap[i][6] %></span></div>
-                                <div><small>TICKS</small><span><%= best_beatmap[i][7] %></span></div>
-                                <div><small>DRP MISS</small><span><%= best_beatmap[i][8] %></span></div>
+                                <div><small>TICKS</small><span><%= best_beatmap[i][8] %></span></div>
+                                <div><small>DRP MISS</small><span><%= best_beatmap[i][7] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= cAcc.toFixed(2) %>%</span></div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div style="display:none;"><small>Total</small><span id="total<%= i %>">
+                                        <%= ctotalHit %></span></div>
                                 <% break;
                                     case 'mania': %>
                                 <% 
                                         <!-- 매니아 정확도 계산 -->
-                                        let miss = best_beatmap[i][10]
-                                        let c50 = best_beatmap[i][9]
-                                        let c100 = best_beatmap[i][8]
-                                        let c200 = best_beatmap[i][7]
-                                        let c300 = best_beatmap[i][5] + best_beatmap[i][6];
-                                        let totalHit = miss + c50 + c100 + c200 + c300;
+                                        let mmiss = best_beatmap[i][10]
+                                        let mc50 = best_beatmap[i][9]
+                                        let mc100 = best_beatmap[i][8]
+                                        let mc200 = best_beatmap[i][7]
+                                        let mc300 = best_beatmap[i][5] + best_beatmap[i][6];
+                                        let mtotalHit = mmiss + mc50 + mc100 + mc200 + mc300;
 
-                                        let abc = ((c50 * 50 + c100 * 100 + c200 * 200 + c300 * 300) / (totalHit * 300)) * 100;
+                                        let mAcc = ((mc50 * 50 + mc100 * 100 + mc200 * 200 + mc300 * 300) / (mtotalHit * 300)) * 100;
                                     %>
                                 <div><small>MAX</small><span><%= best_beatmap[i][5] %></span></div>
                                 <div><small>300</small><span><%= best_beatmap[i][6] %></span></div>
@@ -193,11 +234,10 @@
                                 <div><small>100</small><span><%= best_beatmap[i][8] %></span></div>
                                 <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
-                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= abc.toFixed(2) %>%</span>
-                                </div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= mAcc.toFixed(2) %>%</span></div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
-                                        <%= totalHit %></span></div>
+                                        <%= mtotalHit %></span></div>
                                 <% break;
                                 }%>
                             </div>

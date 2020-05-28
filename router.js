@@ -12,17 +12,17 @@ router.get('/', function (req, res) {
 })
 
 router.get('/userpage', function (req, res) {
-    res.render('userpage', {});
+    res.render('usersearch', {});
 })
 
-router.post('/userpage', function (req, res) {
-    let user = req.body.user;
+router.get('/userpage/info', function (req, res) {
+    let user = req.query.user;
     let mode;
 
-    if(req.body.mode == "" || req.body.mode == null){
+    if(req.query.mode == "" || req.query.mode == null){
         mode = "0";
     } else{
-        mode = req.body.mode;
+        mode = req.query.mode;
     }
     
     let user_url = `https://osu.ppy.sh/api/get_user?u=${user}&m=${mode}&k=${key}`;

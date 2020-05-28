@@ -7,15 +7,11 @@ const router = express.Router();
 
 let key = process.env.API_KEY;
 
-router.get('/', function (req, res) {
-    res.render("index");
-})
-
-router.get('/userpage', function (req, res) {
+router.get('/search', function (req, res) {
     res.render('usersearch', {});
 })
 
-router.get('/userpage/info', function (req, res) {
+router.get('/info', function (req, res) {
     let user = req.query.user;
     let mode;
 
@@ -170,14 +166,6 @@ router.get('/userpage/info', function (req, res) {
         })
 });
 
-/*
-    TODO : 비트맵 관련 페이지 제작
-    STEP1 - 비트맵 목록 받아오기
-*/
-
-router.get('/error', function (req, res) {
-    res.render('error', { error: "error" });
-})
 
 //score 표기시 , 를 제거 해주는 정규식, 점수 관련 계산이 필요해 작성함
 function numberFormat(inputNumber) {

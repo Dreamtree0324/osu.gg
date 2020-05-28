@@ -14,8 +14,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const router = require('./router');
-app.use(router);
+const baseRouter = require('./routers/commonRouter.js');
+app.use('/', baseRouter);
+
+const loginRouter = require('./routers/loginRouter.js');
+app.use('/login', loginRouter);
+
+const userInfoRouter = require('./routers/userinfoRouter.js');
+app.use('/user', userInfoRouter);
+
 
 let server = http.createServer(app);
 server.listen(app.get('port'), function () {

@@ -17,6 +17,7 @@
     "express-session": "^1.17.0",
     "kind-of": "^6.0.3",
     "minimist": "^1.2.5",
+    "mongoose": "^5.9.16",
     "node-fetch": "^2.6.0",
     "requirejs": "^2.3.6"
   },

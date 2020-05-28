@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 let app = express();
 
@@ -22,6 +23,12 @@ app.use('/login', loginRouter);
 
 const userInfoRouter = require('./routers/userinfoRouter.js');
 app.use('/user', userInfoRouter);
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(process.env.MONGO_URI, { useMongoClient: true })
+.then(() => console.log('Successfully connected to mongodb'))
+.catch(e => console.error(e));
 
 
 let server = http.createServer(app);

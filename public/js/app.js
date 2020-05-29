@@ -146,12 +146,13 @@ function getModsName(value) {
     return modsArray;
 }
 
-function clickMods(value, number){
-    if(value !== '0'){
-        let modsArray = getMods(parseInt(value).toString(2));
+for(let i = 0; i < document.querySelectorAll(".song_info").length; i++){
+    let modsNum = document.getElementById("song_mods"+i).innerHTML;
+    if(modsNum !== '0'){
+        let modsArray = getMods(parseInt(modsNum).toString(2));
 
-        document.getElementById('emods' + number).innerText = '+'+modsArray;
+        document.getElementById('emods' + i).innerHTML = '+'+modsArray;
     } else{
-        return;
+        document.getElementById('emods'+ i).innerHTML = "";
     }
 }

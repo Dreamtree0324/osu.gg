@@ -140,7 +140,12 @@ function getModsName(value) {
     }
     
     for(i = 0; i < value.length ; i++){
-      modsArray.push(modsObject[value[i]]);
+        if(value.includes(512)){
+            if(value[i] == 64){
+                continue;
+            }
+        }
+        modsArray.push(modsObject[value[i]]);
     }
 
     return modsArray;

@@ -8,7 +8,6 @@
     <title>OSU STATUS</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
     <div class="wrap card_wrap">
         <section class="form_section">
@@ -113,7 +112,8 @@
                             <span style="color:#ffd900; -webkit-text-stroke: 2px #fff;"> SS </span>
                             <% break; 
                             case 'SS': %>
-                            <span style="color:#ffd900; -webkit-text-stroke: 1px #fff;"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#ffd900; -webkit-text-stroke: 1px #fff;">
+                                <%= best_beatmap[i][2] %></span>
                             <% break; 
                             case 'SH': %>
                             <span style="color:#e2e2e2; -webkit-text-stroke: 2px #999999;"> S </span>
@@ -165,12 +165,13 @@
                                     let stotalHit = smiss + sc50 + sc100 + sc300;
                                     
                                     let sAcc = ((sc50 * 50 + sc100 * 100 + sc300 * 300) / (stotalHit * 300)) * 100;
-                                %>    
+                                %>
                                 <div><small>300</small><span><%= best_beatmap[i][5] + best_beatmap[i][6] %></span></div>
                                 <div><small>100</small><span><%= best_beatmap[i][7] + best_beatmap[i][8] %></span></div>
                                 <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
-                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= sAcc.toFixed(2) %>%</span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= sAcc.toFixed(2) %>%</span>
+                                </div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= stotalHit %></span></div>
@@ -189,7 +190,8 @@
                                 <div><small>GREAT</small><span><%= best_beatmap[i][6] %></span></div>
                                 <div><small>GOOD</small><span><%= best_beatmap[i][8] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
-                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= tAcc.toFixed(2) %>%</span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= tAcc.toFixed(2) %>%</span>
+                                </div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= ttotalHit %></span></div>
@@ -211,7 +213,8 @@
                                 <div><small>TICKS</small><span><%= best_beatmap[i][8] %></span></div>
                                 <div><small>DRP MISS</small><span><%= best_beatmap[i][7] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
-                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= cAcc.toFixed(2) %>%</span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= cAcc.toFixed(2) %>%</span>
+                                </div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= ctotalHit %></span></div>
@@ -234,7 +237,8 @@
                                 <div><small>100</small><span><%= best_beatmap[i][8] %></span></div>
                                 <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
                                 <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
-                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= mAcc.toFixed(2) %>%</span></div>
+                                <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= mAcc.toFixed(2) %>%</span>
+                                </div>
                                 <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= mtotalHit %></span></div>
@@ -242,12 +246,12 @@
                                 }%>
                             </div>
                             <div class="score_pp">
-
-                                <span class="pp"><%= best_beatmap[i][1] %>pp</span><br>
+                                <span class="pp"><%= best_beatmap[i][1] %>pp</span>
+                                
+                                <span class="modsz" id="emods<%= i %>"></span>
+                                <button onclick="clickMods('<%= best_beatmap[i][11] %>', '<%= i %>')">123123123</button>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <% } %>
@@ -260,8 +264,8 @@
         <p style="font-size:34px; color:#fff; font-weight: bold;"><%= userName %>의 <%= msg %></p>
         <% } %>
         <span class="footer">made by : <a href="https://osu.ppy.sh/users/10001325" class="link"
-                target="_blank">JhleeDreamTree ([HyeN])</a> / twitter : <a href="https://twitter.com/onlysugai" class="link"
-                target="_blank">@onlysugai</a></span>
+                target="_blank">JhleeDreamTree ([HyeN])</a> / twitter : <a href="https://twitter.com/onlysugai"
+                class="link" target="_blank">@onlysugai</a></span>
 
     </div>
     <script src="/js/app.js"></script>

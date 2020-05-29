@@ -117,15 +117,6 @@ router.get('/info', function (req, res) {
                                     count50 = +element.count50;
                                     countMiss = +element.countmiss;
                                     mods = element.enabled_mods;
-                                    /*mods 관련 코드 - 576 = NC , 1073741888 = DT+MR , 1073742400 = NC+MR
-                                      해당하는 모든 코드를 DT의 코드로 하드코딩
-                                      1073741824 = MR 이므로 논모드로 처리
-                                    */
-                                    if(mods == 576 || mods == 1073741888 || mods == 1073742400){
-                                        mods = 64;
-                                    } else if(mods == 1073741824){
-                                        mods = 0;
-                                    }
                                     middle[i] = [comma, pp, rank, date, mapId, count320, count300, count200, count100, count50, countMiss, mods, score];
                                     bestPP.push(middle[i]);
                                     i++;

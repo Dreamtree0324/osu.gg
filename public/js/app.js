@@ -33,9 +33,6 @@ function popup(index) {
     document.getElementById('calc_diff').innerText = document.getElementById("song_diff" + index).innerText;
     document.getElementById('calc_ratings').innerText = "★" + document.getElementById("song_rating" + index).innerText;
     document.getElementById('calc_mods').setAttribute("value", document.getElementById("song_mods" + index).innerText);
-    if (document.getElementById('calc_mods').getAttribute("value") == 64) {
-        document.getElementById('calc_mods').innerText = "+DT";
-    }
 
     document.getElementById("calculatedPP").innerText = "";
 }

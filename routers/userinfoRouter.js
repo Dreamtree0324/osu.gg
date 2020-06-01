@@ -129,9 +129,14 @@ router.get('/info', function (req, res) {
                             let songDiff;
                             let songSet;
                             let starRating;
-
+                            let modsMirror;
                             for (let i = 0; i < user_best.length; i++) {
-                                let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${user_best[i][4]}&a=1&m=${mode}&k=${key}&limit=20&mods=${user_best[i][11]}`;
+                                if(user_best[i][11] >= 1073741824){
+                                    modsMirror = user_best[i][11] - 1073741824;
+                                } else {
+                                    modsMirror = user_best[i][11];
+                                }
+                                let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${user_best[i][4]}&a=1&m=${mode}&k=${key}&limit=20&mods=${modsMirror}`;
                                 //베퍼포별 곡 정보 api 호출
                                 best_beatmap = await fetch(URL)
                                     .then(response => response.json())

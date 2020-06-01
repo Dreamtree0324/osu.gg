@@ -6,16 +6,16 @@ sessionStorage.setItem("userName", document.getElementById('nickname').innerText
 
     switch (modeCode) {
         case "0":
-            document.getElementById("mstd").innerText = "Standard★"
+            document.getElementById("mstd").style.cssText = "border-bottom:2px solid #fff;";
             break;
         case "1":
-            document.getElementById("mtai").innerText = "Taiko★"
+            document.getElementById("mtai").style.cssText = "border-bottom:2px solid #fff;";
             break;
         case "2":
-            document.getElementById("mcat").innerText = "Catch★"
+            document.getElementById("mcat").style.cssText = "border-bottom:2px solid #fff;";
             break;
         case "3":
-            document.getElementById("mman").innerText = "Mania★"
+            document.getElementById("mman").style.cssText = "border-bottom:2px solid #fff;";
             break;
     }
 })();

@@ -15,7 +15,6 @@ router.get('/search', function (req, res) {
 router.get('/info', function (req, res) {
     let user = req.query.user;
     let mode;
-    let cookiezi = [];
     if(req.cookies.userName != null && req.cookies.userName2 != null && req.cookies.userName3 != null){
         if(req.cookies.userName != user && req.cookies.userName2 != user && req.cookies.userName3 != user){
             res.cookie("userName2", req.cookies.userName);

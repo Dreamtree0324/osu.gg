@@ -151,8 +151,14 @@ router.get('/info', function (req, res) {
                             for (let i = 0; i < user_best.length; i++) {
                                 if(user_best[i][11] >= 1073741824){
                                     modsMirror = user_best[i][11] - 1073741824;
+                                    if(modsMirror == 576){
+                                        modsMirror -= 512;
+                                    }
                                 } else {
                                     modsMirror = user_best[i][11];
+                                    if(modsMirror == 1073741824 + 576){
+                                        modsMirror -= 512;
+                                    }
                                 }
                                 let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${user_best[i][4]}&a=1&m=${mode}&k=${key}&limit=20&mods=${modsMirror}`;
                                 //베퍼포별 곡 정보 api 호출

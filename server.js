@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 // const mongoose = require('mongoose');
 
 let app = express();
@@ -14,7 +15,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 const baseRouter = require('./routers/commonRouter.js');
 app.use('/', baseRouter);
 

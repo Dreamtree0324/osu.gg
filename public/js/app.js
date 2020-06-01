@@ -42,7 +42,7 @@ function closePopup() {
     document.getElementById('calcPopup').classList.toggle("hidden");
 }
 
-//매니아 PP 계산식
+//PP 계산식
 function calcPP() {
     maniaCalcPP();
 }

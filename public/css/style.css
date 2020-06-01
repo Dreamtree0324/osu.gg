@@ -26,6 +26,26 @@ body{
     margin-top:50px;
 }
 
+.recent_box{
+    display:flex;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+.recent{
+    color:#fff;
+    margin:0;
+    margin-left:15px;
+    font-weight: bold;
+    transition:all 0.5s;
+}
+
+.recent:hover{
+    color:rgb(184, 184, 184);
+    transform:scale(1.05);
+    transition:all 0.5s;
+}
+
 .userForm{
     width:450px;
     height: 40px;

@@ -20,19 +20,10 @@
                 
             </article>
         </section>
-        <% if(typeof userList != 'undefined') { %>
-        <div class="recent_box" style="width:460px;">
-            <span style="color:#fff; margin:0;">최근 검색 유저</span>
-            <% if(cookiezi[0] != null) { %>
-                <a href="/user/info?user=<%= cookiezi[0] %>" class="recent"><%= cookiezi[0] %></a>
-            <% } %>
-            <% if(cookiezi[1] != null) { %>
-                <a href="/user/info?user=<%= cookiezi[1] %>" class="recent"><%= cookiezi[1] %></a>
-            <% } %>
-            <% if(cookiezi[2] != null) { %>
-                <a href="/user/info?user=<%= cookiezi[2] %>" class="recent"><%= cookiezi[2] %></a>
-            <% } %>
+        <div class="recent_box" id="recent_box" style="width:460px;">
+            <span style="margin:0; color:#fff">최근 검색 유저 : </span>
         </div>
+        <% if(typeof userList != 'undefined') { %>
         <main>
             <form>
                 <input type="hidden" value="<%= userList[13] %>" id="modeCode">

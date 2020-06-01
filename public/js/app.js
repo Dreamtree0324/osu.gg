@@ -158,3 +158,38 @@ for(let i = 0; i < document.querySelectorAll(".song_info").length; i++){
         document.getElementById('emods'+ i).innerHTML = "";
     }
 }
+
+function getCookie(name) {
+    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return value? value[2] : null;
+}
+
+if(getCookie("userName") != null){
+    let user1 = document.createElement("a");
+    let box = document.getElementById("recent_box");
+    user1.href = "/user/info?user="+getCookie("userName");
+    user1.innerHTML = getCookie("userName");
+    user1.setAttribute("class", "recent");
+
+    box.appendChild(user1);
+}
+
+if(getCookie("userName2") != null){
+    let user2 = document.createElement("a");
+    let box = document.getElementById("recent_box");
+    user2.href = "/user/info?user="+getCookie("userName2");
+    user2.innerHTML = getCookie("userName2");
+    user2.setAttribute("class", "recent");
+
+    box.appendChild(user2);
+}
+
+if(getCookie("userName3") != null){
+    let user3 = document.createElement("a");
+    let box = document.getElementById("recent_box");
+    user3.href = "/user/info?user="+getCookie("userName3");
+    user3.innerHTML = getCookie("userName3");
+    user3.setAttribute("class", "recent");
+
+    box.appendChild(user3);
+}

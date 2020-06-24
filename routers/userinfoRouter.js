@@ -173,7 +173,7 @@ router.get('/info', function (req, res) {
 
                     switch (mode) {
                         case "0":
-                            StdUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
+                             StdUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
                                 if (err) return res.json(err);
                             })
                             break;
@@ -193,22 +193,9 @@ router.get('/info', function (req, res) {
                             })
                             break;
                     }
-
-                    switch (mode) {
-                        case "0":
-                            StdUserBest.find({user_name : { $regex: new RegExp(user, "i") }}, function(err, user_best_info){
-                                user_best_info[0].best_score.forEach(element => {
-                                    let songUrl = `https://osu.ppy.sh/api/get_beatmaps?b=${element.mapId}&a=1&m=${mode}&k=${key}&limit=20&mods=${element.mods}`;
-
-                                    fetch(songUrl)
-                                    .then(response => response.json())
-                                    .then(json => {
-                                        
-                                    })
-                                })
-                            })
-                    }
                 })
+
+                console.log(array_best_info);
         }
     });
 

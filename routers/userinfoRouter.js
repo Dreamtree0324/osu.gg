@@ -22,6 +22,7 @@ router.get('/search', function (req, res) {
 
 router.get('/info', function (req, res) {
     let user = req.query.user;
+    let detailUser;
     let mode;
     if (req.cookies.userName != null && req.cookies.userName2 != null && req.cookies.userName3 != null) {
         if (req.cookies.userName != user && req.cookies.userName2 != user && req.cookies.userName3 != user) {
@@ -101,16 +102,11 @@ router.get('/info', function (req, res) {
         if (userinfo != false) {
             console.log("Data Load Success");
 
-            StdUserBest.find({user_name : { $regex: new RegExp(user, "i") }}, function(err, user_best_info){
-                user_best_info[0].best_score.forEach(element => {
-                    console.log(element.mapId + " / " + element.mods);
-                })
-            })
-
         } else {
             await fetch(user_url)
                 .then(response => response.json())
                 .then(json => {
+                    detailUser = json[0].user_name;
                     let player_info = {
                         user_name: json[0].username,
                         user_id: json[0].user_id,
@@ -173,7 +169,7 @@ router.get('/info', function (req, res) {
 
                     switch (mode) {
                         case "0":
-                             StdUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
+                            StdUserBest.create({ user_name: user, best_score: array_best_info, song_info: [""] }, function (err, best_info) {
                                 if (err) return res.json(err);
                             })
                             break;
@@ -195,7 +191,40 @@ router.get('/info', function (req, res) {
                     }
                 })
 
-                console.log(array_best_info);
+            let array_song_info = [];
+
+            array_best_info.forEach(async (element, idx, array) => {
+
+                if (element.mods >= 1073741824) {
+                    modsMirror = element.mods - 1073741824;
+                } else {
+                    modsMirror = element.mods;
+                }
+                let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${element.mapId}&a=1&m=${mode}&k=${key}&limit=20&mods=${element.mods}`;
+
+                await fetch(URL)
+                    .then(response => response.json())
+                    .then(json => {
+                        let song_info = {
+                            song_title: json[0].title,
+                            song_diff: json[0].version,
+                            song_set: json[0].beatmapset_id,
+                            star_rating: json[0].difficultyrating,
+                            song_overall: json[0].diff_overall
+                        }
+
+                        array_song_info.push(song_info);
+                    })
+
+                    if (idx === array.length - 1) {
+                        StdUserBest.updateOne({user_name: { $regex: new RegExp(user, "i") }},{$set: {song_info : array_song_info}}, function (err, sibal) {
+                            
+                        })
+                        
+                    }
+                    
+            })
+
         }
     });
 

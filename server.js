@@ -3,9 +3,30 @@ const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-// const mongoose = require('mongoose');;
+const mongoose = require('mongoose')
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 let app = express();
+
+const MONGO_DB = process.env.MONGO_DB;
+
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+mongoose.set("useUnifiedTopology", true);
+mongoose.connect(MONGO_DB);
+
+let db = mongoose.connection;
+
+db.once('open', function(){
+    console.log('DB Connected');
+})
+
+db.on('error', function(err){
+    console.log('DB ERROR : ', err);
+})
 
 app.set('port', (process.env.PORT) || 3331);
 
@@ -24,13 +45,6 @@ app.use('/login', loginRouter);
 
 const userInfoRouter = require('./routers/userinfoRouter.js');
 app.use('/user', userInfoRouter);
-
-// mongoose.Promise = global.Promise;
-
-// mongoose.connect(process.env.MONGO_URI, { useMongoClient: true })
-// .then(() => console.log('Successfully connected to mongodb'))
-// .catch(e => console.error(e));
-
 
 let server = http.createServer(app);
 server.listen(app.get('port'), function () {

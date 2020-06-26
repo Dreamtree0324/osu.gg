@@ -103,93 +103,93 @@ router.get('/info', function (req, res) {
             console.log("Data Load Success");
 
         } else {
-            await fetch(user_url)
-                .then(response => response.json())
-                .then(json => {
-                    detailUser = json[0].user_name;
-                    let player_info = {
-                        user_name: json[0].username,
-                        user_id: json[0].user_id,
-                        user_country: json[0].country,
-                        user_playCount: json[0].playcount,
-                        user_grank: json[0].pp_rank,
-                        user_crank: json[0].pp_country_rank,
-                        user_performance: json[0].pp_raw,
-                        countSS: json[0].count_rank_ss,
-                        countSSH: json[0].count_rank_ssh,
-                        countS: json[0].count_rank_s,
-                        countSH: json[0].count_rank_sh,
-                        countA: json[0].count_rank_a
-                    }
-                    switch (mode) {
-                        case "0":
-                            StdUser.create(player_info, function (err, user) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "1":
-                            TaiUser.create(player_info, function (err, user) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "2":
-                            CtbUser.create(player_info, function (err, user) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "3":
-                            ManUser.create(player_info, function (err, user) {
-                                if (err) return res.json(err);
-                            })
-                    }
-                })
+
+            let fetchUser = await fetch(user_url);
+            let user_info = await fetchUser.json();
+            detailUser = user_info[0].user_name;
+            let player_info = {
+                user_name: user_info[0].username,
+                user_id: user_info[0].user_id,
+                user_country: user_info[0].country,
+                user_playCount: user_info[0].playcount,
+                user_grank: user_info[0].pp_rank,
+                user_crank: user_info[0].pp_country_rank,
+                user_performance: user_info[0].pp_raw,
+                countSS: user_info[0].count_rank_ss,
+                countSSH: user_info[0].count_rank_ssh,
+                countS: user_info[0].count_rank_s,
+                countSH: user_info[0].count_rank_sh,
+                countA: user_info[0].count_rank_a
+            }
+            switch (mode) {
+                case "0":
+                    StdUser.create(player_info, function (err, user) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+                case "1":
+                    TaiUser.create(player_info, function (err, user) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+                case "2":
+                    CtbUser.create(player_info, function (err, user) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+                case "3":
+                    ManUser.create(player_info, function (err, user) {
+                        if (err) return res.json(err);
+                    })
+            }
             let array_best_info = [];
 
-            await fetch(best_url)
-                .then(response => response.json())
-                .then(json => {
-                    json.forEach(element => {
-                        let best_info = {
-                            score: element.score,
-                            pp: element.pp,
-                            rank: element.rank,
-                            date: element.date,
-                            mapId: element.beatmap_id,
-                            count320: element.countgeki,
-                            count300: element.count300,
-                            count200: element.countkatu,
-                            count100: element.count100,
-                            count50: element.count50,
-                            countMiss: element.countmiss,
-                            mods: element.enabled_mods
-                        }
+            let best = await fetch(best_url);
+            let best_info = await best.json();
 
-                        array_best_info.push(best_info);
+            console.log();
+
+            best_info.forEach(element => {
+                let best_info = {
+                    score: element.score,
+                    pp: element.pp,
+                    rank: element.rank,
+                    date: element.date,
+                    mapId: element.beatmap_id,
+                    count320: element.countgeki,
+                    count300: element.count300,
+                    count200: element.countkatu,
+                    count100: element.count100,
+                    count50: element.count50,
+                    countMiss: element.countmiss,
+                    mods: element.enabled_mods
+                }
+
+                array_best_info.push(best_info);
+            })
+
+            switch (mode) {
+                case "0":
+                    StdUserBest.create({ user_name: user, best_score: array_best_info, song_info: [""] }, function (err, best_info) {
+                        if (err) return res.json(err);
                     })
-
-                    switch (mode) {
-                        case "0":
-                            StdUserBest.create({ user_name: user, best_score: array_best_info, song_info: [""] }, function (err, best_info) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "1":
-                            TaiUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "2":
-                            CtbUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                        case "3":
-                            ManUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
-                                if (err) return res.json(err);
-                            })
-                            break;
-                    }
-                })
+                    break;
+                case "1":
+                    TaiUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+                case "2":
+                    CtbUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+                case "3":
+                    ManUserBest.create({ user_name: user, best_score: array_best_info }, function (err, best_info) {
+                        if (err) return res.json(err);
+                    })
+                    break;
+            }
 
             let array_song_info = [];
 
@@ -202,27 +202,42 @@ router.get('/info', function (req, res) {
                 }
                 let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${element.mapId}&a=1&m=${mode}&k=${key}&limit=20&mods=${element.mods}`;
 
-                await fetch(URL)
-                    .then(response => response.json())
-                    .then(json => {
-                        let song_info = {
-                            song_title: json[0].title,
-                            song_diff: json[0].version,
-                            song_set: json[0].beatmapset_id,
-                            star_rating: json[0].difficultyrating,
-                            song_overall: json[0].diff_overall
+                let song = await fetch(URL);
+                let songs = await song.json();
+
+                let best_song_info = {
+                    obj_idx: idx,
+                    song_title: songs[0].title,
+                    song_diff: songs[0].version,
+                    song_set: songs[0].beatmapset_id,
+                    star_rating: songs[0].difficultyrating,
+                    song_overall: songs[0].diff_overall,
+                    song_id: songs[0].beatmap_id
+                }
+
+                array_song_info.push(best_song_info);
+
+                setTimeout(function () {
+                    array_song_info.sort(function (a, b){
+                        if(a.obj_idx > b.obj_idx){
+                            return 1;
+                        }
+                        if(a.obj_idx < b.obj_idx){
+                            return -1;
                         }
 
-                        array_song_info.push(song_info);
-                    })
+                        return 0;
+                    });
 
+                    console.log(array_song_info);
                     if (idx === array.length - 1) {
-                        StdUserBest.updateOne({user_name: { $regex: new RegExp(user, "i") }},{$set: {song_info : array_song_info}}, function (err, sibal) {
+                        console.log(array_song_info);
+                        StdUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
                             
                         })
-                        
                     }
-                    
+                }, 3000)
+
             })
 
         }

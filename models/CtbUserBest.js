@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 
 var ctb_user_bestSchema = mongoose.Schema({
     user_name : {type:String, require:true, unique:true},
-    best_score : [Object]
+    best_score : [Object],
+    song_info : [Object],
 }, {
     writeConcern: {
         j: true,

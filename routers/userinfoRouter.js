@@ -147,8 +147,6 @@ router.get('/info', function (req, res) {
             let best = await fetch(best_url);
             let best_info = await best.json();
 
-            console.log();
-
             best_info.forEach(element => {
                 let best_info = {
                     score: element.score,
@@ -218,23 +216,45 @@ router.get('/info', function (req, res) {
                 array_song_info.push(best_song_info);
 
                 setTimeout(function () {
-                    array_song_info.sort(function (a, b){
-                        if(a.obj_idx > b.obj_idx){
+                    array_song_info.sort(function (a, b) {
+                        if (a.obj_idx > b.obj_idx) {
                             return 1;
                         }
-                        if(a.obj_idx < b.obj_idx){
+                        if (a.obj_idx < b.obj_idx) {
                             return -1;
                         }
 
                         return 0;
                     });
 
-                    console.log(array_song_info);
                     if (idx === array.length - 1) {
-                        console.log(array_song_info);
-                        StdUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
-                            
-                        })
+                        switch (mode) {
+                            case "0":
+                                StdUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                    if (err) return res.json(err);
+                                    console.log("update Success");
+                                })
+                                break;
+                            case "1":
+                                TaiUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                    if (err) return res.json(err);
+                                    console.log("update Success");
+                                })
+                                break;
+                            case "2":
+                                CtbUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                    if (err) return res.json(err);
+                                    console.log("update Success");
+                                })
+                                break;
+                            case "3":
+                                ManUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                    if (err) return res.json(err);
+                                    console.log("update Success");
+                                })
+                                break;
+                        }
+
                     }
                 }, 3000)
 

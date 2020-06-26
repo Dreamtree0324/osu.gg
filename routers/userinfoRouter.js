@@ -83,6 +83,8 @@ router.get('/info', function (req, res) {
 
     let userList = [];
     let User;
+    let UserBest;
+
     switch (mode) {
         case "0":
             User = StdUser;
@@ -98,8 +100,26 @@ router.get('/info', function (req, res) {
             break;
     }
 
+    switch (mode) {
+        case "0":
+            UserBest = StdUserBest;
+            break;
+        case "1":
+            UserBest = TaiUserBest;
+            break;
+        case "2":
+            UserBest = CtbUserBest;
+            break;
+        case "3":
+            UserBest = ManUserBest;
+            break;
+    }
+
     User.find({ user_name: { $regex: new RegExp(user, "i") } }, async function (err, userinfo) {
         if (userinfo != false) {
+            UserBest.find({ user_name : { $regex: new RegExp(user, "i") }}, function(err, users){
+                
+            })
             console.log("Data Load Success");
 
         } else {

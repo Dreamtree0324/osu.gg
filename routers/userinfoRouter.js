@@ -48,21 +48,9 @@ router.get('/info', function (req, res) {
         mode = req.query.mode;
     }
 
-    let user_url = `https://osu.ppy.sh/api/get_user?u=${user}&m=${mode}&k=${key}`;
+    const user_url = `https://osu.ppy.sh/api/get_user?u=${user}&m=${mode}&k=${key}`;
     const best_url = `https://osu.ppy.sh/api/get_user_best?u=${user}&m=${mode}&k=${key}&limit=20`
 
-    let userID;
-    let userName;
-    let playCount;
-    let gRank;
-    let cRank;
-    let countSS;
-    let countSSH;
-    let countS;
-    let countSH;
-    let countA;
-    let pp;
-    let userCountry;
     let modeName;
 
     //mode 체크
@@ -80,23 +68,26 @@ router.get('/info', function (req, res) {
             modeName = "mania";
             break;
     }
-
-    let userList = [];
     let User;
     let UserBest;
+    let searchMode;
 
     switch (mode) {
         case "0":
             User = StdUser;
+            searchMode = "standard";
             break;
         case "1":
             User = TaiUser;
+            searchMode = "taiko";
             break;
         case "2":
             User = CtbUser;
+            searchMode = "catch";
             break;
         case "3":
             User = ManUser;
+            searchMode = "mania";
             break;
     }
 
@@ -115,12 +106,14 @@ router.get('/info', function (req, res) {
             break;
     }
 
-    User.find({ user_name: { $regex: new RegExp(user, "i") } }, async function (err, userinfo) {
-        if (userinfo != false) {
-            UserBest.find({ user_name : { $regex: new RegExp(user, "i") }}, function(err, users){
-                
-            })
+    User.find({ user_name: { $regex: new RegExp(user, "i") } }, async function (err, user_info) {
+        if (user_info != false) {
+
             console.log("Data Load Success");
+
+            UserBest.find({ user_name: { $regex: new RegExp(user, "i") } }, function (err, user_best) {
+                res.render('userpage', { user_info: user_info, user_best: user_best, searchMode: searchMode });
+            })
 
         } else {
 
@@ -131,15 +124,16 @@ router.get('/info', function (req, res) {
                 user_name: user_info[0].username,
                 user_id: user_info[0].user_id,
                 user_country: user_info[0].country,
-                user_playCount: user_info[0].playcount,
-                user_grank: user_info[0].pp_rank,
-                user_crank: user_info[0].pp_country_rank,
-                user_performance: user_info[0].pp_raw,
-                countSS: user_info[0].count_rank_ss,
-                countSSH: user_info[0].count_rank_ssh,
-                countS: user_info[0].count_rank_s,
-                countSH: user_info[0].count_rank_sh,
-                countA: user_info[0].count_rank_a
+                user_playCount: +user_info[0].playcount,
+                user_grank: +user_info[0].pp_rank,
+                user_crank: +user_info[0].pp_country_rank,
+                user_performance: parseInt(user_info[0].pp_raw),
+                countSS: parseInt(user_info[0].count_rank_ss),
+                countSSH: parseInt(user_info[0].count_rank_ssh),
+                countS: parseInt(user_info[0].count_rank_s),
+                countSH: parseInt(user_info[0].count_rank_sh),
+                countA: parseInt(user_info[0].count_rank_a),
+                update_time: Date.now().toString()
             }
             switch (mode) {
                 case "0":
@@ -170,19 +164,20 @@ router.get('/info', function (req, res) {
             best_info.forEach(element => {
                 let best_info = {
                     score: element.score,
-                    pp: element.pp,
+                    pp: +element.pp,
                     rank: element.rank,
                     date: element.date,
                     mapId: element.beatmap_id,
-                    count320: element.countgeki,
-                    count300: element.count300,
-                    count200: element.countkatu,
-                    count100: element.count100,
-                    count50: element.count50,
-                    countMiss: element.countmiss,
-                    mods: element.enabled_mods
+                    count320: +element.countgeki,
+                    count300: +element.count300,
+                    count200: +element.countkatu,
+                    count100: +element.count100,
+                    count50: +element.count50,
+                    countMiss: +element.countmiss,
+                    mods: element.enabled_mods,
+                    comma: numberFormat(element.score)
                 }
-
+                
                 array_best_info.push(best_info);
             })
 
@@ -235,7 +230,7 @@ router.get('/info', function (req, res) {
 
                 array_song_info.push(best_song_info);
 
-                setTimeout(function () {
+                setTimeout(async function () {
                     array_song_info.sort(function (a, b) {
                         if (a.obj_idx > b.obj_idx) {
                             return 1;
@@ -250,28 +245,32 @@ router.get('/info', function (req, res) {
                     if (idx === array.length - 1) {
                         switch (mode) {
                             case "0":
-                                StdUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                await StdUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
                                     if (err) return res.json(err);
                                     console.log("update Success");
                                 })
+                                res.redirect("/user/info?mode=0&user=" + user);
                                 break;
                             case "1":
-                                TaiUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                await TaiUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
                                     if (err) return res.json(err);
                                     console.log("update Success");
                                 })
+                                res.redirect("/user/info?mode=1&user=" + user);
                                 break;
                             case "2":
-                                CtbUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                await CtbUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
                                     if (err) return res.json(err);
                                     console.log("update Success");
                                 })
+                                res.redirect("/user/info?mode=2&user=" + user);
                                 break;
                             case "3":
-                                ManUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
+                                await ManUserBest.updateOne({ user_name: { $regex: new RegExp(user, "i") } }, { $set: { song_info: array_song_info } }, function (err, sibal) {
                                     if (err) return res.json(err);
                                     console.log("update Success");
                                 })
+                                res.redirect("/user/info?mode=3&user=" + user);
                                 break;
                         }
 
@@ -282,114 +281,70 @@ router.get('/info', function (req, res) {
 
         }
     });
-
-    //유저 정보 chapi 호출
-    fetch(user_url)
-        .then(response => {
-            if (response.status === 200 || response.status === 201) {
-                response.json().then(json => {
-                    if (json == "") {
-                        res.render("userpage", { msg: "정보가 없습니다.", userName: user });
-                        return;
-                    }
-                    userID = json[0].user_id;
-                    userName = json[0].username;
-                    userCountry = json[0].country;
-                    playCount = json[0].playcount;
-                    gRank = +json[0].pp_rank;
-                    cRank = +json[0].pp_country_rank;
-                    pp = parseInt(json[0].pp_raw);
-                    countSS = +json[0].count_rank_ss
-                    countSSH = +json[0].count_rank_ssh
-                    countS = +json[0].count_rank_s
-                    countSH = +json[0].count_rank_sh
-                    countA = +json[0].count_rank_a
-                    userList = [userName, userCountry, playCount, gRank, cRank, pp, countSS, countSSH, countS, countSH, countA, userID, modeName, mode];
-
-                    const best_url = `https://osu.ppy.sh/api/get_user_best?u=${user}&m=${mode}&k=${key}&limit=20`
-
-                    !async function () {
-                        let score;
-                        let pp;
-                        let rank;
-                        let date;
-                        let mapId;
-                        let count320;
-                        let count300;
-                        let count200;
-                        let count100;
-                        let count50;
-                        let countMiss;
-                        let mods;
-
-                        let middle = [];
-                        let mapInfo = [];
-                        let bestPP = [];
-
-                        //유저 베퍼포 api 호출
-                        let user_best = await fetch(best_url)
-                            .then(response => response.json())
-                            .then(json => {
-                                json.forEach(element => {
-                                    let i = 0;
-                                    score = element.score;
-                                    let comma = numberFormat(score);
-                                    pp = +element.pp;
-                                    rank = element.rank;
-                                    date = element.date;
-                                    mapId = element.beatmap_id;
-                                    count320 = +element.countgeki;
-                                    count300 = +element.count300;
-                                    count200 = +element.countkatu;
-                                    count100 = +element.count100;
-                                    count50 = +element.count50;
-                                    countMiss = +element.countmiss;
-                                    mods = element.enabled_mods;
-                                    middle[i] = [comma, pp, rank, date, mapId, count320, count300, count200, count100, count50, countMiss, mods, score];
-                                    bestPP.push(middle[i]);
-                                    i++;
-                                })
-                                return bestPP;
-                            }).catch(err => console.log(err));
-                        !async function () {
-                            let best_beatmap;
-                            let songTitle;
-                            let songDiff;
-                            let songSet;
-                            let starRating;
-                            let modsMirror;
-                            for (let i = 0; i < user_best.length; i++) {
-                                if (user_best[i][11] >= 1073741824) {
-                                    modsMirror = user_best[i][11] - 1073741824;
-                                } else {
-                                    modsMirror = user_best[i][11];
-                                }
-                                modsMirror = user_best[i][11] - (modsMirror.toString(2) & 512);
-                                let URL = `https://osu.ppy.sh/api/get_beatmaps?b=${user_best[i][4]}&a=1&m=${mode}&k=${key}&limit=20&mods=${modsMirror}`;
-                                //베퍼포별 곡 정보 api 호출
-                                best_beatmap = await fetch(URL)
-                                    .then(response => response.json())
-                                    .then(json => {
-                                        songTitle = json[0].title;
-                                        songDiff = json[0].version;
-                                        songSet = json[0].beatmapset_id;
-                                        starRating = json[0].difficultyrating;
-                                        songOD = json[0].diff_overall;
-
-                                        mapInfo[i] = [songTitle, songDiff, songSet, starRating, songOD];
-
-                                        user_best[i].push(mapInfo[i]);
-                                        return user_best;
-
-                                    }).catch(err => console.log(err));
-                            }
-                            res.render('userpage', { userList: userList, best_beatmap: best_beatmap });
-                        }();
-                    }();
-                }).catch(err => { console.log(err) });
-            }
-        })
 });
+
+router.post("/info", async function (req, res) {
+    let user_name = req.body.updateName;
+    let mode = req.body.updateMode;
+
+    let User;
+    let UserBest;
+    let searchMode;
+
+    switch (mode) {
+        case "standard":
+            mode = "0";
+            break;
+        case "taiko":
+            mode = "1";
+            break;
+        case "catch":
+            mode = "2";
+            break;
+        case "mania":
+            mode = "3";
+            break;
+    }
+
+    switch (mode) {
+        case "0":
+            User = StdUser;
+            searchMode = "standard";
+            break;
+        case "1":
+            User = TaiUser;
+            searchMode = "taiko";
+            break;
+        case "2":
+            User = CtbUser;
+            searchMode = "catch";
+            break;
+        case "3":
+            User = ManUser;
+            searchMode = "mania";
+            break;
+    }
+
+    switch (mode) {
+        case "0":
+            UserBest = StdUserBest;
+            break;
+        case "1":
+            UserBest = TaiUserBest;
+            break;
+        case "2":
+            UserBest = CtbUserBest;
+            break;
+        case "3":
+            UserBest = ManUserBest;
+            break;
+    }
+
+    await User.deleteOne({ user_name: { $regex: new RegExp(user_name, "i") } });
+    await UserBest.deleteOne({ user_name: { $regex: new RegExp(user_name, "i") } });
+
+    res.redirect("/user/info?mode=" + mode + "&user=" + user_name);
+})
 
 
 //score 표기시 , 를 제거 해주는 정규식, 점수 관련 계산이 필요해 작성함

@@ -13,6 +13,7 @@ var ctb_userSchema = mongoose.Schema({
     countS:{type: String},
     countSH:{type: String},
     countA:{type: String},
+    update_time: {type: String}
 
 }, {
     writeConcern: {

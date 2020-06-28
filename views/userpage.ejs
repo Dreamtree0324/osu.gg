@@ -23,59 +23,58 @@
         <div class="recent_box" id="recent_box" style="width:460px;">
             <span style="margin:0; color:#fff">최근 검색 유저 : </span>
         </div>
-        <% if(typeof userList != 'undefined') { %>
+        <% if(typeof user_info[0] != 'undefined') { %>
         <main>
             <form>
-                <input type="hidden" value="<%= userList[13] %>" id="modeCode">
+                <input type="hidden" value="<%= searchMode %>" id="modeCode">
             </form>
 
             <div class="user_info">
                 <div class="rank_wrap">
                     <div>
-                        <img src="https://a.ppy.sh/<%= userList[11] %>" alt="<%= userList[0] %>'s Avatar" width="200"
+                        <img src="https://a.ppy.sh/<%= user_info[0].user_id %>" alt="<%= user_info[0].user_name %>'s Avatar" width="200"
                             height="200">
                     </div>
 
                     <div>
-                        <span><strong style="color:#ffd900">SS</strong> : <%= userList[6] %></span>
-                        <span><strong style="color:#999999">SS</strong> : <%= userList[7] %></span>
+                        <span><strong style="color:#ffd900">SS</strong> : <%= user_info[0].countSS %></span>
+                        <span><strong style="color:#999999">SS</strong> : <%= user_info[0].countSSH %></span>
                     </div>
                     <div>
-                        <span><strong style="color:#ffd900">S</strong> : <%= userList[8] %></span>
-                        <span><strong style="color:#999999">S</strong> : <%= userList[9] %></span>
+                        <span><strong style="color:#ffd900">S</strong> : <%= user_info[0].countS %></span>
+                        <span><strong style="color:#999999">S</strong> : <%= user_info[0].countSH %></span>
                     </div>
                     <div>
-                        <span><strong style="color:#048500">A</strong> : <%= userList[10] %></span>
+                        <span><strong style="color:#048500">A</strong> : <%= user_info[0].countA %></span>
                         <span><strong style="color:#fff;">total</strong> :
-                            <%= userList[6] + userList[7] + userList[8] + userList[9] + userList[10] %></span>
+                            <%= parseInt(user_info[0].countSS) + parseInt(user_info[0].countSSH) + parseInt(user_info[0].countS) + parseInt(user_info[0].countSH) + parseInt(user_info[0].countA) %></span>
                     </div>
                 </div>
 
                 <div class="info_wrap">
-                    <span id="nickname"><%= userList[0] %></span>
-                    <span id="playcount">Play Count : <%= userList[2] %></span>
-                    <span id="pp">Performance Point : <%= userList[5] %>pp</span>
-                    <span id="playmode">Play Mode : <%= userList[12] %></span>
+                    <span id="nickname"><%= user_info[0].user_name %></span>
+                    <span id="playcount">Play Count : <%= user_info[0].user_playCount %></span>
+                    <span id="pp">Performance Point : <%= user_info[0].user_performance %>pp</span>
 
                     <div class="rank_info">
-                        <span class="player_rank"><%= userList[1] %> #<%= userList[3] %>
-                            <small>(#<%= userList[4] %>)</small></span>
+                        <span class="player_rank"><%= user_info[0].user_country %> #<%= user_info[0].user_grank %>
+                            <small>(#<%= user_info[0].user_crank %>)</small></span>
                     </div>
                 </div>
 
-                <%if(typeof best_beatmap != "undefined"){ %>
+                <%if(typeof user_best[0] != "undefined"){ %>
                 <div class="other_wrap">
-                    <% let result = 0; let sum = 0;%>
-                    <% for(let i = 0; i < best_beatmap.length; i++){
-                        sum = sum + best_beatmap[i][1];
+                    <% let result = 0; let sum = 0; %>
+                    <% for(let i = 0; i < user_best[0].best_score.length; i++){
+                        sum = sum + user_best[0].best_score[i].pp;
                     } %>
                     <div class="other_pp">
                         <span class="avr"> Average PP : <span class="pp"><%= Math.round(sum / 20) * 1 %>
                                 PP</span></span>
-                        <span class="hig"> Highest PP : <span class="pp"><%= best_beatmap[0][1] * 1 %> PP<span></span>
+                        <span class="hig"> Highest PP : <span class="pp"><%= user_best[0].best_score[0].pp * 1 %> PP<span></span>
                     </div>
                     <div>
-                        <% let topof = userList[3] / 15210892 * 100; %>
+                        <% let topof = parseInt(user_info[0].user_grank) / 15210892 * 100; %>
                         <% if(topof <= 100 && topof > 1) { %>
                         <span><%= topof.toFixed(3) %> % of top</span>
                         <% } else if(topof <= 1 && topof > 0.0001) { %>
@@ -86,6 +85,22 @@
                         <span><%= topof.toFixed(6) %> % of top</span>
                         <% } else { %>
                         <% } %>
+                    </div>
+
+                    <div class="update_section">
+                        <form action="/user/info" method="post">
+                            <input type="hidden" name="updateName" value="<%= user_info[0].user_name %>">
+                            <input type="hidden" name="updateMode" value="<%= searchMode %>">
+                            <% let d = new Date(parseInt(user_info[0].update_time));%>
+                            <% date_format_str = d.getFullYear().toString()+"-"+((d.getMonth()+1).toString().length==2?(d.getMonth()+1).toString():"0"+(d.getMonth()+1).toString())+"-"+(d.getDate().toString().length==2?d.getDate().toString():"0"+d.getDate().toString())+" "+(d.getHours().toString().length==2?d.getHours().toString():"0"+d.getHours().toString())+":"+((parseInt(d.getMinutes()/5)*5).toString().length==2?(parseInt(d.getMinutes()/5)*5).toString():"0"+(parseInt(d.getMinutes()/5)*5).toString())+":" + ((parseInt(d.getSeconds()/5)*5).toString().length==2?(parseInt(d.getSeconds()/5)*5).toString():"0"+(parseInt(d.getSeconds()/5)*5).toString()) %>;
+                            <% if(parseInt(user_info[0].update_time) + 60000 < Date.now()){ %>
+                                <button type="submit" id="update_submit">Update</button>
+                            <% } else{ %>
+                                <span style="margin-top:100px;">최근에 업데이트 되었습니다. 1분 뒤 새로고침 후 버튼을 눌러주세요.</span><br>
+                                <small style="color:#fff">최종 업데이트 : <%= date_format_str %></small>
+                            <% } %>
+                        </form>
+                        
                     </div>
                     <% } else { %>
                     <span style="font-size:24px; color:#fff; font-weight: bold;">정보가 없습니다.</span>
@@ -98,15 +113,15 @@
                 <span onclick="changeMode('mcat');" id="mcat" class="modeSelect">Catch</span>
                 <span onclick="changeMode('mman');" id="mman" class="modeSelect">Mania</span>
             </div>
-            <% if(typeof best_beatmap != 'undefined'){ %>
+            <% if(typeof user_best[0] != "undefined"){ %>
             <div class="state">
-                <% for(let i = 0; i < best_beatmap.length; i++){ %>
+                <% for(let i = 0; i < user_best[0].song_info.length; i++){ %>
                 <div class="song_info" id="song_info<%= i %>" onclick="popup('<%= i %>');"
-                    style="background:url('https://assets.ppy.sh/beatmaps/<%= best_beatmap[i][13][2] %>/covers/cover.jpg') no-repeat center center; background-size: cover; cursor: pointer;">
+                    style="background:url('https://assets.ppy.sh/beatmaps/<%= user_best[0].song_info[i].song_set %>/covers/cover.jpg') no-repeat center center; background-size: cover; cursor: pointer;">
                     <div class="overlay"></div>
                     <div class="song_wrap">
                         <div class="rank">
-                            <% switch(best_beatmap[i][2]){
+                            <% switch(user_best[0].best_score[i].rank){
                             case 'XH': %>
                             <span style="color:#e2e2e2; -webkit-text-stroke: 2px #fff;"> SS </span>
                             <% break; 
@@ -115,25 +130,25 @@
                             <% break; 
                             case 'SS': %>
                             <span style="color:#ffd900; -webkit-text-stroke: 1px #fff;">
-                                <%= best_beatmap[i][2] %></span>
+                                <%= user_best[0].best_score[i].rank %></span>
                             <% break; 
                             case 'SH': %>
                             <span style="color:#e2e2e2; -webkit-text-stroke: 2px #999999;"> S </span>
                             <% break; 
                             case 'S': %>
-                            <span style="color:#ffd900"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#ffd900"> <%= user_best[0].best_score[i].rank %></span>
                             <% break;
                             case 'A': %>
-                            <span style="color:#048500"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#048500"> <%= user_best[0].best_score[i].rank %></span>
                             <% break;
                             case 'B': %>
-                            <span style="color:#2318bb"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#2318bb"> <%= user_best[0].best_score[i].rank %></span>
                             <% break;
                             case 'C': %>
-                            <span style="color:#800491"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#800491"> <%= user_best[0].best_score[i].rank %></span>
                             <% break;
                             default:  %>
-                            <span style="color:#666"> <%= best_beatmap[i][2] %></span>
+                            <span style="color:#666"> <%= user_best[0].best_score[i].rank %></span>
                             <% break;
                         }%>
                         </div>
@@ -142,113 +157,112 @@
                             <div class="song_diff">
                                 <div class="song_diff_box">
                                     <span class="song_title"
-                                        id="song_title<%= i %>"><%= best_beatmap[i][13][0] %></span>
-                                    <span class="diff" id="song_diff<%= i %>">[<%= best_beatmap[i][13][1] %>]</span>
+                                        id="song_title<%= i %>"><%= user_best[0].song_info[i].song_title %></span>
+                                    <span class="diff" id="song_diff<%= i %>">[<%= user_best[0].song_info[i].song_diff %>]</span>
                                     <div style="display:none;">
-                                        <span id="song_rating<%= i %>"><%= best_beatmap[i][13][3] %></span>
-                                        <span id="song_od<%= i %>"> <%= best_beatmap[i][13][4] %></span>
-                                        <span class="mods" id="song_mods<%= i %>"><%= best_beatmap[i][11] %></span>
+                                        <span id="song_rating<%= i %>"><%= user_best[0].song_info[i].star_rating %></span>
+                                        <span id="song_od<%= i %>"> <%= user_best[0].song_info[i].song_overall %></span>
                                     </div>
                                 </div>
                                 <div class="date-wrap">
-                                    <span class="date"><%= best_beatmap[i][3] %></span>
+                                    <span class="date"><%= user_best[0].best_score[i].date %></span>
                                 </div>
                             </div>
 
                             <div class="judge">
-                                <% switch(userList[12]){
+                                <% switch(searchMode){
                                     case 'standard': %>
                                 <%
-                                    let smiss = best_beatmap[i][10]
-                                    let sc50 = best_beatmap[i][9]
-                                    let sc100 = best_beatmap[i][8]
-                                    let sc300 = best_beatmap[i][6];
+                                    let smiss = user_best[0].best_score[i].countMiss;
+                                    let sc50 = user_best[0].best_score[i].count50;
+                                    let sc100 = user_best[0].best_score[i].count100
+                                    let sc300 = user_best[0].best_score[i].count300
 
                                     let stotalHit = smiss + sc50 + sc100 + sc300;
                                     
                                     let sAcc = ((sc50 * 50 + sc100 * 100 + sc300 * 300) / (stotalHit * 300)) * 100;
                                 %>
-                                <div><small>300</small><span><%= best_beatmap[i][5] + best_beatmap[i][6] %></span></div>
-                                <div><small>100</small><span><%= best_beatmap[i][7] + best_beatmap[i][8] %></span></div>
-                                <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
-                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>300</small><span><%= user_best[0].best_score[i].count320 + user_best[0].best_score[i].count300 %></span></div>
+                                <div><small>100</small><span><%= user_best[0].best_score[i].count100 + user_best[0].best_score[i].count200 %></span></div>
+                                <div><small>50</small><span><%= user_best[0].best_score[i].count50 %></span></div>
+                                <div><small>MISS</small><span><%= user_best[0].best_score[i].countMiss %></span></div>
                                 <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= sAcc.toFixed(2) %>%</span>
                                 </div>
-                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= user_best[0].best_score[i].comma %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= stotalHit %></span></div>
                                 <% break; 
                                     case 'taiko': %>
                                 <%
-                                    let tmiss = best_beatmap[i][10];
-                                    let tc50 = best_beatmap[i][5]
-                                    let tc100 = best_beatmap[i][8];
-                                    let tc300 = best_beatmap[i][6];
+                                    let tmiss = user_best[0].best_score[i].countMiss;
+                                    let tc50 = user_best[0].best_score[i].count320;
+                                    let tc100 = user_best[0].best_score[i].count100;
+                                    let tc300 = user_best[0].best_score[i].count300;
                                     
                                     let ttotalHit = tc50 + tc100 + tc300 + tmiss;
 
                                     let tAcc = ((tc100 * 150 + tc300 * 300) / (ttotalHit * 300)) * 100;
                                 %>
-                                <div><small>GREAT</small><span><%= best_beatmap[i][6] %></span></div>
-                                <div><small>GOOD</small><span><%= best_beatmap[i][8] %></span></div>
-                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>GREAT</small><span><%= user_best[0].best_score[i].count300 %></span></div>
+                                <div><small>GOOD</small><span><%= user_best[0].best_score[i].count100 %></span></div>
+                                <div><small>MISS</small><span><%= user_best[0].best_score[i].countMiss %></span></div>
                                 <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= tAcc.toFixed(2) %>%</span>
                                 </div>
-                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= user_best[0].best_score[i].comma %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= ttotalHit %></span></div>
                                 <% break;
                                     case 'catch': %>
                                 <%
-                                    let cmiss = best_beatmap[i][10];
-                                    let cc50 = best_beatmap[i][9]
-                                    let cc100 = best_beatmap[i][8];
-                                    let cc300 = best_beatmap[i][6];
-                                    let ckatu = best_beatmap[i][7];
+                                    let cmiss = user_best[0].best_score[i].countMiss;
+                                    let cc50 = user_best[0].best_score[i].count50;
+                                    let cc100 = user_best[0].best_score[i].count100;
+                                    let cc300 = user_best[0].best_score[i].count300;
+                                    let ckatu = user_best[0].best_score[i].count200;
                                     
                                     let ctotalHit = cc50 + cc100 + cc300 + ckatu + cmiss;
                                     let csuccessHit = cc50 + cc100 + cc300;
 
                                     let cAcc = (csuccessHit / ctotalHit) * 100;
                                 %>
-                                <div><small>FRUITS</small><span><%= best_beatmap[i][6] %></span></div>
-                                <div><small>TICKS</small><span><%= best_beatmap[i][8] %></span></div>
-                                <div><small>DRP MISS</small><span><%= best_beatmap[i][7] %></span></div>
-                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>FRUITS</small><span><%= user_best[0].best_score[i].count300 %></span></div>
+                                <div><small>TICKS</small><span><%= user_best[0].best_score[i].count100 %></span></div>
+                                <div><small>DRP MISS</small><span><%= user_best[0].best_score[i].count200 %></span></div>
+                                <div><small>MISS</small><span><%= user_best[0].best_score[i].countMiss %></span></div>
                                 <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= cAcc.toFixed(2) %>%</span>
                                 </div>
-                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= user_best[0].best_score[i].comma %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= ctotalHit %></span></div>
                                 <% break;
                                     case 'mania': %>
                                 <% 
                                         <!-- 매니아 정확도 계산 -->
-                                        let mmiss = best_beatmap[i][10]
-                                        let mc50 = best_beatmap[i][9]
-                                        let mc100 = best_beatmap[i][8]
-                                        let mc200 = best_beatmap[i][7]
-                                        let mc300 = best_beatmap[i][5] + best_beatmap[i][6];
+                                        let mmiss = user_best[0].best_score[i].countMiss;
+                                        let mc50 = user_best[0].best_score[i].count50;
+                                        let mc100 = user_best[0].best_score[i].count100;
+                                        let mc200 = user_best[0].best_score[i].count200
+                                        let mc300 = user_best[0].best_score[i].count320 + user_best[0].best_score[i].count300;
                                         let mtotalHit = mmiss + mc50 + mc100 + mc200 + mc300;
 
                                         let mAcc = ((mc50 * 50 + mc100 * 100 + mc200 * 200 + mc300 * 300) / (mtotalHit * 300)) * 100;
                                     %>
-                                <div><small>MAX</small><span><%= best_beatmap[i][5] %></span></div>
-                                <div><small>300</small><span><%= best_beatmap[i][6] %></span></div>
-                                <div><small>200</small><span><%= best_beatmap[i][7] %></span></div>
-                                <div><small>100</small><span><%= best_beatmap[i][8] %></span></div>
-                                <div><small>50</small><span><%= best_beatmap[i][9] %></span></div>
-                                <div><small>MISS</small><span><%= best_beatmap[i][10] %></span></div>
+                                <div><small>MAX</small><span><%= user_best[0].best_score[i].count320 %></span></div>
+                                <div><small>300</small><span><%= user_best[0].best_score[i].count300 %></span></div>
+                                <div><small>200</small><span><%= user_best[0].best_score[i].count200 %></span></div>
+                                <div><small>100</small><span><%= user_best[0].best_score[i].count100 %></span></div>
+                                <div><small>50</small><span><%= user_best[0].best_score[i].count50 %></span></div>
+                                <div><small>MISS</small><span><%= user_best[0].best_score[i].countMiss %></span></div>
                                 <div><small>Accuracy</small><span id="song_acc<%= i %>"><%= mAcc.toFixed(2) %>%</span>
                                 </div>
-                                <div><small>Score</small><span id="score<%= i %>"><%= best_beatmap[i][0] %></span></div>
+                                <div><small>Score</small><span id="score<%= i %>"><%= user_best[0].best_score[i].comma %></span></div>
                                 <div style="display:none;"><small>Total</small><span id="total<%= i %>">
                                         <%= mtotalHit %></span></div>
                                 <% break;
                                 }%>
                             </div>
                             <div class="score_pp">
-                                <span class="pp"><%= best_beatmap[i][1] %>pp</span>
+                                <span class="pp"><%= user_best[0].best_score[i].pp %>pp</span>
                                 <span class="modsz" id="emods<%= i %>"></span>
                             </div>
                         </div>
@@ -260,8 +274,6 @@
                 <p style="font-size:34px; color:#fff; font-weight: bold;">정보가 없습니다.</p>
                 <% } %>
         </main>
-        <% } else if(typeof userList == undefined ){ %>
-        <p style="font-size:34px; color:#fff; font-weight: bold;"><%= userName %>의 <%= msg %></p>
         <% } %>
         <span class="footer">made by : <a href="https://osu.ppy.sh/users/10001325" class="link"
                 target="_blank">JhleeDreamTree ([HyeN])</a> / twitter : <a href="https://twitter.com/onlysugai"

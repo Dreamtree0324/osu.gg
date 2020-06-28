@@ -58,7 +58,7 @@ body{
     background-color:#fff;
 }
 
-form > input{
+.userForm > input{
     width:300px;
     height:24px;
     font-size:16px;
@@ -71,7 +71,7 @@ form > input{
     border-radius: 24px;
 }
 
-form > button{
+.userForm > button{
     width:70px;
     height:100%;
     outline: none;
@@ -84,7 +84,7 @@ form > button{
     transition:all .3s;
 }
 
-form > button:hover{
+.userForm > button:hover{
     background-color: rgba(0,0,0,0.7);
     color:#fff;
 }
@@ -190,6 +190,30 @@ form > button:hover{
 .other_pp > span{
     font-size:24px;
 }
+
+#update_submit{
+    font-size:36px;
+    outline: none;
+    margin:0;
+    background: none;
+    border:none;
+    border-radius: 8px;
+    border: solid 2px #fff;
+    padding:5px 5px;
+    box-shadow: 0px 2px 4px 0px hsla(0,0%,0%,0.5);
+    color:#fff;
+    background-color: rgba(0,0,0,0);
+    margin-top:100px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#update_submit:hover{
+    background-color: rgba(255,255,255,1);
+    color:#000;
+    transition: all 0.3s;
+}
+
 .footer{
     color:#fff;
 }

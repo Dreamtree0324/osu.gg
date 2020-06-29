@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OSU STATUS</title>
+    <title>OSU STATUS | <%= user_info[0].user_name %>'s Profile</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
         <div class="recent_box" id="recent_box" style="width:460px;">
             <span style="margin:0; color:#fff">최근 검색 유저 : </span>
         </div>
-        <% if(typeof user_info[0] != 'undefined') { %>
+        <% if(typeof user_info[0] != 'undefined' || user_info != false) { %>
         <main>
             <form>
                 <input type="hidden" value="<%= searchMode %>" id="modeCode">
@@ -162,6 +162,7 @@
                                     <div style="display:none;">
                                         <span id="song_rating<%= i %>"><%= user_best[0].song_info[i].star_rating %></span>
                                         <span id="song_od<%= i %>"> <%= user_best[0].song_info[i].song_overall %></span>
+                                        <span class="mods" id="song_mods<%= i %>"><%= user_best[0].best_score[i].mods %></span>
                                     </div>
                                 </div>
                                 <div class="date-wrap">

@@ -114,11 +114,13 @@ router.get('/info', function (req, res) {
             UserBest.find({ user_name: { $regex: new RegExp(user, "i") } }, function (err, user_best) {
                 res.render('userpage', { user_info: user_info, user_best: user_best, searchMode: searchMode });
             })
-
         } else {
 
             let fetchUser = await fetch(user_url);
             let user_info = await fetchUser.json();
+            if(user_info == false){
+                res.render("error", {msg : "존재하지 않는 유저입니다."})
+            }
             detailUser = user_info[0].user_name;
             let player_info = {
                 user_name: user_info[0].username,

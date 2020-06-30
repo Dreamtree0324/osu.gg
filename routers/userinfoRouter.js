@@ -118,8 +118,8 @@ router.get('/info', function (req, res) {
 
             let fetchUser = await fetch(user_url);
             let user_info = await fetchUser.json();
-            if(user_info == false){
-                res.render("error", {msg : "존재하지 않는 유저입니다."})
+            if (user_info == false) {
+                res.render("error", { msg: "존재하지 않는 유저입니다." })
             }
             detailUser = user_info[0].user_name;
             let player_info = {
@@ -137,6 +137,15 @@ router.get('/info', function (req, res) {
                 countA: parseInt(user_info[0].count_rank_a),
                 update_time: Date.now().toString()
             }
+
+            for (const [key, value] of Object.entries(player_info)) {
+                if (typeof value == "number" && isNaN(value)) {
+                    Object.defineProperty(player_info, key, {
+                        value: 0
+                    })
+                }
+            }
+
             switch (mode) {
                 case "0":
                     StdUser.create(player_info, function (err, user) {
@@ -179,7 +188,7 @@ router.get('/info', function (req, res) {
                     mods: element.enabled_mods,
                     comma: numberFormat(element.score)
                 }
-                
+
                 array_best_info.push(best_info);
             })
 

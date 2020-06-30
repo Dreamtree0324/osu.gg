@@ -61,8 +61,7 @@
                             <small>(#<%= user_info[0].user_crank %>)</small></span>
                     </div>
                 </div>
-
-                <%if(typeof user_best[0] != "undefined"){ %>
+                <%if(typeof user_best[0].best_score[0] != "undefined"){ %>
                 <div class="other_wrap">
                     <% let result = 0; let sum = 0; %>
                     <% for(let i = 0; i < user_best[0].best_score.length; i++){
@@ -113,7 +112,7 @@
                 <span onclick="changeMode('mcat');" id="mcat" class="modeSelect">Catch</span>
                 <span onclick="changeMode('mman');" id="mman" class="modeSelect">Mania</span>
             </div>
-            <% if(typeof user_best[0] != "undefined"){ %>
+            <% if(typeof user_best[0].best_score[0] != "undefined"){ %>
             <div class="state">
                 <% for(let i = 0; i < user_best[0].song_info.length; i++){ %>
                 <div class="song_info" id="song_info<%= i %>" onclick="popup('<%= i %>');"

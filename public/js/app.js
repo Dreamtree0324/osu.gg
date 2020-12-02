@@ -1,6 +1,6 @@
 sessionStorage.setItem("userName", document.getElementById('nickname').innerText);
 
-//해당 모드 셀렉트시 모드명 뒤에 별 붙혀주는 함수
+//해당 모드 셀렉트시 모드명에 밑줄 표시하는 함수
 (function () {
     let modeCode = document.getElementById("modeCode").value;
 
@@ -20,7 +20,7 @@ sessionStorage.setItem("userName", document.getElementById('nickname').innerText
     }
 })();
 
-//pp 계산기 띄워주는 팝업,팝업을 닫았다 새로 열때마다 값이 초기화 된 후 새롭게 정보 다시 받아서 뿌려줌
+//pp 계산기 띄워주는 팝업,팝업을 닫았다 새로 열때마다 기존에 있던 팝업의 곡 정보들을 초기화한 후 새롭게 곡의 정보를 다시 받아 뿌려줌
 function popup(index) {
     document.getElementById('calcPopup').classList.toggle("hidden");
 
